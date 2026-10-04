@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230e86a8'/%3E%3Cpath d='M12 12l16 16M28 12L12 28' stroke='%23fde047' stroke-width='6' stroke-linecap='round'/%3E%3Ccircle cx='44' cy='44' r='9' fill='none' stroke='%2367e8f9' stroke-width='6'/%3E%3C/svg%3E">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <main class="game">
+        <h1 class="title">Tic Tac Toe</h1>
+
+        <div class="players">
+            <div class="player player-x" id="player-x">
+                <span class="player-mark">X</span>
+                <span class="player-name">You</span>
+            </div>
+            <div class="player player-o" id="player-o">
+                <span class="player-mark">O</span>
+                <span class="player-name">Computer</span>
+            </div>
+        </div>
+
+        <p class="status" id="status" aria-live="polite">Press Start to play</p>
+
+        <div class="board" id="board" role="grid" aria-label="Game board">
+            <button class="cell" type="button" data-index="0" aria-label="Cell 1, empty" disabled></button>
+            <button class="cell" type="button" data-index="1" aria-label="Cell 2, empty" disabled></button>
+            <button class="cell" type="button" data-index="2" aria-label="Cell 3, empty" disabled></button>
+            <button class="cell" type="button" data-index="3" aria-label="Cell 4, empty" disabled></button>
+            <button class="cell" type="button" data-index="4" aria-label="Cell 5, empty" disabled></button>
+            <button class="cell" type="button" data-index="5" aria-label="Cell 6, empty" disabled></button>
+            <button class="cell" type="button" data-index="6" aria-label="Cell 7, empty" disabled></button>
+            <button class="cell" type="button" data-index="7" aria-label="Cell 8, empty" disabled></button>
+            <button class="cell" type="button" data-index="8" aria-label="Cell 9, empty" disabled></button>
+        </div>
+
+        <button class="start" id="start" type="button">Start</button>
+    </main>
+
+    <script src="main.js"></script>
+</body>
+</html>

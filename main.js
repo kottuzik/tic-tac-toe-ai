@@ -61,8 +61,9 @@
             ]
         }
     };
-    const AudioContextClass =window.AudioContext || window.webkitAudioContext;
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
     let audioContext = null;
+    let masterGain = null;
 
     // Must first be called from a user gesture (the Start click) so the browser allows audio.
     function ensureAudio() {
@@ -71,9 +72,17 @@
         if (audioContext.state === 'suspended') audioContext.resume();
     }
 
+    // Each game routes its sounds through its own gain node, so a restart can silence the old melody.
+    function resetMasterGain() {
+        if (!audioContext) return;
+        if (masterGain) masterGain.disconnect();
+        masterGain = audioContext.createGain();
+        masterGain.connect(audioContext.destination);
+    }
+
     // Plays one tone gliding from sound.from to sound.to, starting `delay` seconds from now.
     function playTone(sound, delay) {
-        if (!audioContext) return;
+        if (!audioContext || !masterGain) return;
         const start = audioContext.currentTime + delay;
         const end = start + sound.duration;
 
@@ -89,7 +98,7 @@
         gain.gain.exponentialRampToValueAtTime(0.0001, end);
 
         oscillator.connect(gain);
-        gain.connect(audioContext.destination);
+        gain.connect(masterGain);
         oscillator.start(start);
         oscillator.stop(end + 0.02);
     }
@@ -160,7 +169,8 @@
 
     function setStatus(text, modifier) {
         statusEl.textContent = text;
-        statusEl.className = 'status' + (modifier ? ' ' + modifier : '');
+        statusEl.classList.remove('thinking', 'result');
+        if (modifier) statusEl.classList.add(modifier);
     }
 
     function setActivePlayer(mark) {
@@ -170,7 +180,7 @@
 
     function updateCellAvailability() {
         cells.forEach(function (cell, index) {
-            cell.disabled = !(playing && userTurn && board[index] === null);
+            cell.setAttribute('aria-disabled', String(!(playing && userTurn && board[index] === null)));
         });
     }
 
@@ -220,6 +230,7 @@
     }
 
     function computerMove(index) {
+        if (!playing) return;
         placeMark(index, COMPUTER);
         if (!checkGameOver(COMPUTER)) giveTurnToUser();
     }
@@ -244,6 +255,7 @@
 
     function startGame() {
         ensureAudio();
+        resetMasterGain();
         clearTimeout(computerTimer);
         computerTimer = null;
 
